@@ -113,7 +113,7 @@ public class GUI implements ActionListener{
     private void generate_list_1(Integer mode, String dept){
         PrintWriter new_list;
         String file_name = "";
-        String end_msg = "ERROR";
+//        String end_msg = "ERROR";
         try {
             IN_PROGRESS();
             String college = "";
@@ -138,20 +138,20 @@ public class GUI implements ActionListener{
 
                 case 0:
                     file_name = "\\1. COMPLETE RAFFLE-ATTENDANCE INFORMATION.txt";
-                    end_msg = file_name.substring(1) +" ---- COMPLETE!";
+//                    end_msg = file_name.substring(1) +" ---- COMPLETE!";
                     break;
                 case 1:
                     file_name = "\\2. CLOSE TO HAVING ONE ENTRY --- STUDENTS FILE.txt";
-                    end_msg = file_name.substring(1) +" ---- COMPLETE!";
+//                    end_msg = file_name.substring(1) +" ---- COMPLETE!";
                     break;
                 case 2:
                     file_name = String.format("\\3a. (COMPLETE) (%s) %s --- RAFFLE INFORMATION.txt", dept, college);
-                    end_msg = file_name.substring(1) +" ---- COMPLETE!";
+//                    end_msg = file_name.substring(1) +" ---- COMPLETE!";
                     break;
 
                 case 3:
                     file_name = String.format("\\3b. (FILTERED) (%s) %s --- RAFFLE INFORMATION.txt", dept, college);
-                    end_msg = file_name.substring(1) +" ---- COMPLETE!";
+//                    end_msg = file_name.substring(1) +" ---- COMPLETE!";
                     break;
             }
 
@@ -230,18 +230,18 @@ public class GUI implements ActionListener{
 
         PrintWriter new_list;
         String file_name;
-        String end_msg = "ERROR";
+//        String end_msg = "ERROR";
         try {
 
             IN_PROGRESS();
 
             if (complete_list){
                 file_name = "\\LIST OF MILESTONES (COMPLETE).txt";
-                end_msg = "LIST OF MILESTONES (COMPLETE) --------- COMPLETE";
+//                end_msg = "LIST OF MILESTONES (COMPLETE) --------- COMPLETE";
             }
             else{
                 file_name = "\\LIST OF MILESTONES (WEEKLY).txt";
-                end_msg = "LIST OF MILESTONES (WEEKLY) ----------- COMPLETE";
+//                end_msg = "LIST OF MILESTONES (WEEKLY) ----------- COMPLETE";
             }
 
             // Creates the dictionary (if it doesn't exist)
@@ -480,11 +480,7 @@ public class GUI implements ActionListener{
 
         PrintWriter new_list;
         try {
-
             IN_PROGRESS();
-
-           // Console message variables to show progress of this method running
-//            System.out.println("Generating the EMAIL LIST (CHECK-UPs).txt file...");
 
             // Creates the dictionary (if it doesn't exist)
             // Then creates a text file that is to be written into called: EMAIL LIST (CHECK-UPs).txt
@@ -507,11 +503,7 @@ public class GUI implements ActionListener{
             // Valid Emails
             // Generates a list of students that may need to a check up email that have been missing from
             // sessions for more than two weeks, or 14 days
-//            System.out.print("PROGRESS:[");
             for (String mp_leader : mavpass_leaders()){
-
-                // PROGRESS BAR INCREMENT
-//                System.out.print("#");
 
                 ArrayList<String> student_lines = new ArrayList<>();
                 for(StudentObject.Student student:programData.getStudents()){
@@ -555,7 +547,6 @@ public class GUI implements ActionListener{
             fileNotFoundException.printStackTrace();
         }
         progress_frame.dispose();
-//        System.out.println("] <- DONE!");
 //        System.out.println("CHECK UP EMAILS FILE ------------------ COMPLETE");
     }
 
@@ -616,7 +607,6 @@ public class GUI implements ActionListener{
         if(!generated_files.exists()){
             boolean dir_made = generated_files.mkdirs();
             if (dir_made){
-                // System message
                 System.out.println("Directory made!");
             }
         }
