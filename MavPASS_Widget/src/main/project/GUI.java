@@ -47,13 +47,13 @@ public class GUI implements ActionListener{
             illegalAccessException.printStackTrace();
         }
 
-        // Main JFrame
+        // Setting up Main JFrame
         frame_main = new JFrame("MavPASS Attendance Program");
         frame_main.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame_main.setPreferredSize(new Dimension(720,360));
         frame_main.setMinimumSize(new Dimension(720,360));
 
-        // Buttons
+        // Setting up Buttons
         JButton btn_UPLOAD = new JButton("Select Excel Files and Create CSV");
         btn_UPLOAD.addActionListener(this);
         btn_UPLOAD.setActionCommand("CREATE CSV");
@@ -66,7 +66,7 @@ public class GUI implements ActionListener{
         btn_EXIT.addActionListener(this);
         btn_EXIT.setActionCommand("EXIT_1");
 
-        // Labels
+        // Setting up Labels
         JLabel label_welcome = new JLabel("Welcome to the MavPASS Attendance Program!");
         label_welcome.setHorizontalAlignment(SwingConstants.CENTER);
         label_welcome.setFont(new Font("Consolas", Font.BOLD, 26));
@@ -75,17 +75,19 @@ public class GUI implements ActionListener{
         label_welcome_2.setFont(new Font("Consolas", Font.BOLD | Font.ITALIC, 18));
         label_welcome_2.setHorizontalAlignment(SwingConstants.CENTER);
 
-        // Panel / Component Container
+        // Setting up Panel / Component Container
         JPanel panel_welcome = new JPanel();
         panel_welcome.setLayout(new GridLayout(5, 1));
         panel_welcome.setSize(new Dimension(700, 340));
 
+        // Adds to the welcome panel
         panel_welcome.add(label_welcome);
         panel_welcome.add(label_welcome_2);
         panel_welcome.add(btn_UPLOAD);
         panel_welcome.add(btn_GEN_EMAILS);
         panel_welcome.add(btn_EXIT);
 
+        // Adds panel to the main frame, moves window to center of screen
         frame_main.add(panel_welcome);
         frame_main.setLocationRelativeTo(null);
         frame_main.setVisible(true);
@@ -114,8 +116,11 @@ public class GUI implements ActionListener{
         PrintWriter new_list;
         String file_name = "";
 //        String end_msg = "ERROR";
+
         try {
             IN_PROGRESS();
+
+            //  Sets college String for specific College Title
             String college = "";
             switch(dept){
                 case "A&H":
@@ -133,28 +138,35 @@ public class GUI implements ActionListener{
             }
 
             // Creates the dictionary (if it doesn't exist)
-            // Then creates a text file that is to be written into called: ATTENDANCE BY CLASS CODE TOTAL.txt
+            // Then creates a text file that is to be written based on the current mode
             switch (mode){
 
+                // COMPLETE RAFFLE-ATTENDANCE DATA
                 case 0:
                     file_name = "\\1. COMPLETE RAFFLE-ATTENDANCE INFORMATION.txt";
 //                    end_msg = file_name.substring(1) +" ---- COMPLETE!";
                     break;
+
+                // Close to having an Entry into a Raffle
                 case 1:
                     file_name = "\\2. CLOSE TO HAVING ONE ENTRY --- STUDENTS FILE.txt";
 //                    end_msg = file_name.substring(1) +" ---- COMPLETE!";
                     break;
+
+                // COMPLETE, Department Specific Data
                 case 2:
                     file_name = String.format("\\3a. (COMPLETE) (%s) %s --- RAFFLE INFORMATION.txt", dept, college);
 //                    end_msg = file_name.substring(1) +" ---- COMPLETE!";
                     break;
 
+                // FILTERED, Department Specific Data
                 case 3:
                     file_name = String.format("\\3b. (FILTERED) (%s) %s --- RAFFLE INFORMATION.txt", dept, college);
 //                    end_msg = file_name.substring(1) +" ---- COMPLETE!";
                     break;
             }
 
+            // Creates the file to write into
             new_list = new PrintWriter(create_directory(true) + file_name);
 
             // Timestamps the generated text file with the date and time (on a 24 hour clock)
@@ -162,6 +174,7 @@ public class GUI implements ActionListener{
             String first_line = String.format("Generated on: %s%n%n", today.toDate());
             new_list.write(first_line);
 
+            // If a mode is a "COMPLETE" version, writes ALL of the available data
             if(mode == 0 || mode == 1){
                 for (String dept_ : new String[]{"A&H", "COB", "SBS", "CSET"}){
                     for(String data_line : ProgramData.entries_by_college(mode, dept_)){
@@ -169,47 +182,13 @@ public class GUI implements ActionListener{
                     }
                 }
             }
+
+            // Else write only the current department
             else{
                 for(String data_line : ProgramData.entries_by_college(mode, dept)){
                     new_list.write(data_line+"\n");
                 }
             }
-
-
-
-//            String second_line = "Student Attendance Data by Class Code w/ Number of Entries\n" +
-//                    "########################################################################################################################";
-//            new_list.write(second_line);
-//
-//            // Variables to check if there are available students to be written into the text file
-//            boolean no_students = true;
-//            String na_line = "\n< Not Available >";
-//
-//            // Valid Emails
-//            // Prints out every student who has 10 or more sessions in any specific class session (class code)
-//            // AND includes their number of entries into Department specific raffle(s)
-//            for (StudentObject.Student student : programData.getStudents()){
-//
-//                ArrayList<Hashtable> student_data = ProgramData.attendance_by_code();
-//                int last_idx = student_data.size() - 1;
-//
-//                    if(student_data.size() > 0){
-//
-////                        // Skip student if they have NO ENTRIES
-////                        if(filtered && student_data.get(last_idx).contains("NO ENTRIES")){
-////                            continue;
-////                        }
-//
-//                        no_students = false;
-//                        new_list.write("\n" +student_data.get(last_idx));
-//                    }
-//
-//            }
-//
-//            // No students could be found to generate this category
-//            if(no_students){
-//                new_list.write(na_line+"\n");
-//            }
 
             // Done with file, garbage collection
             new_list.close();
@@ -235,6 +214,7 @@ public class GUI implements ActionListener{
 
             IN_PROGRESS();
 
+            // Names the file you want based on COMPLETE LIST boolean
             if (complete_list){
                 file_name = "\\LIST OF MILESTONES (COMPLETE).txt";
 //                end_msg = "LIST OF MILESTONES (COMPLETE) --------- COMPLETE";
@@ -271,6 +251,7 @@ public class GUI implements ActionListener{
                 int st_atn_total = student.getSessions().size();
                 SessionObject.Session milestone_session;
 
+                // Prints only the 5 session milestones
                 if ((st_atn_total >= 5))
                 {
                     milestone_session = student.getSessions().get(4);
@@ -295,6 +276,7 @@ public class GUI implements ActionListener{
                 int st_atn_total = student.getSessions().size();
                 SessionObject.Session milestone_session;
 
+                // Prints only the 10 session milestones
                 if ((st_atn_total >= 10))
                 {
                     milestone_session = student.getSessions().get(9);
@@ -318,6 +300,7 @@ public class GUI implements ActionListener{
                 int st_atn_total = student.getSessions().size();
                 SessionObject.Session milestone_session;
 
+                // Prints only the 20 session milestones
                 if ((st_atn_total >= 20))
                 {
                     milestone_session = student.getSessions().get(19);
@@ -340,12 +323,26 @@ public class GUI implements ActionListener{
 //        System.out.println(end_msg);
     }
 
-    private boolean milestones_lists(Boolean complete_list, PrintWriter new_list, boolean no_students,
+    /**
+     * Repeated code found in the generation function of the MILESTONES file(s). Generates the info lines for
+     * the current student being generated.
+     *
+     * @param complete_list - boolean, True if you want the complete list of milestones, False if you want weekly
+     * @param new_list - PrintWriter, actual file to generate into
+     * @param no_students - boolean, True if no_students, False otherwise
+     * @param student - StudentObject.Student, student object currently being generated
+     * @param milestone_session - SessionObject.Session, actual MILESTONE session for the student
+     * @return value of no_student boolean
+     */
+    private boolean milestones_lists(boolean complete_list, PrintWriter new_list, boolean no_students,
                                      StudentObject.Student student, SessionObject.Session milestone_session) {
+
+        // If COMPLETE LIST is needed...
         if(complete_list){
             no_students = false;
             String data_line;
 
+            // Checks student's email Validity
             if (student.email_valid()){
                 data_line = String.format("<%s> %s%n    Milestone Achievement Date: %s (%s days ago)%n",
                         student.getName(),
@@ -353,6 +350,7 @@ public class GUI implements ActionListener{
                         milestone_session.getDate_str(),
                         milestone_session.days_since());
             }
+            // Marks the data as "INVALID" email
             else{
                 data_line = String.format("<%s> %s <--- ************************************* INVALID EMAIL **********"+
                                 "   %n    Milestone Achievement Date: %s (%s days ago)%n",
@@ -362,13 +360,17 @@ public class GUI implements ActionListener{
                         milestone_session.days_since());
             }
 
-
+            // Write into the file
             new_list.write(data_line);
         }
+
+        // For WEEKLY milestone achievements
         else{
             if (milestone_session.days_since() <= 7){
                 no_students = false;
                 String data_line;
+
+                // Checks student's email Validity
                 if (student.email_valid()){
                     data_line = String.format("<%s> %s%n    Milestone Achievement Date: %s (%s days ago)%n",
                             student.getName(),
@@ -376,6 +378,8 @@ public class GUI implements ActionListener{
                             milestone_session.getDate_str(),
                             milestone_session.days_since());
                 }
+
+                // Marks the data as "INVALID" email
                 else{
                     data_line =
                             String.format("<%s> %s <--- ************************************* INVALID EMAIL **********"+
@@ -385,7 +389,6 @@ public class GUI implements ActionListener{
                             milestone_session.getDate_str(),
                             milestone_session.days_since());
                 }
-
                 new_list.write(data_line);
             }
         }
@@ -509,24 +512,23 @@ public class GUI implements ActionListener{
                 for(StudentObject.Student student:programData.getStudents()){
                     String mpl = student.getLatestSession().getMP_leader()  + " - " + student.getLatestSession().getClass_code();
 
+                    // Only writes student data based on current MavPASS Leader
                     if(!student.getStatus()
                             && mp_leader.equals(mpl))
                     {
                         no_students = false;
                         String email;
+                        String valid_marker = "";
 
-                        if (student.email_valid()){
-                            email = String.format("%n<%s> %s%n  - LAST ATTENDANCE: %s, DAYS SINCE: %s", student.getName(),
-                                    student.getEmail(),
-                                    student.getLatestSession().getDate_str(),
-                                    student.getLatestSession().days_since());
+                        // Adds a INVALID EMAIL marker if student generated an invalid email - MARKED FOR REVIEW
+                        if (!student.email_valid()){
+                            valid_marker = "<-- ***** INVALID EMAIL *****";
                         }
-                        else {
-                            email = String.format("%n<%s> %s <-- ***** INVALID EMAIL *****%n  - LAST ATTENDANCE: %s, DAYS SINCE: %s", student.getName(),
-                                    student.getEmail(),
-                                    student.getLatestSession().getDate_str(),
-                                    student.getLatestSession().days_since());
-                        }
+
+                        email = String.format("%n<%s> %s%s%n  - LAST ATTENDANCE: %s, DAYS SINCE: %s", student.getName(),
+                                student.getEmail(), valid_marker,
+                                student.getLatestSession().getDate_str(),
+                                student.getLatestSession().days_since());
 
                         student_lines.add(email);
                     }
@@ -542,7 +544,6 @@ public class GUI implements ActionListener{
             // Done with file, garbage collection
             new_list.close();
 
-
         } catch (FileNotFoundException fileNotFoundException) {
             fileNotFoundException.printStackTrace();
         }
@@ -552,17 +553,25 @@ public class GUI implements ActionListener{
 
     /**
      * Repeated code that was found when generating Thank-you And Check-up Emails.
+     * @param new_list - PrintWriter, actual File to write in
+     * @param mp_leader - String, Current MavPASS Leader
+     * @param student_lines - ArrayList<String>, student data as lines of Strings
      */
     private void mp_leader_line(PrintWriter new_list, String mp_leader, ArrayList<String> student_lines) {
+
+        // As long as the student has >0 lines
         if (student_lines.size() != 0){
+
+            // Write the data based on Current MavPASS Leader
             String line = String.format("%n%nMavPASS Leader: %s%n", mp_leader);
             new_list.write(line);
 
+            // '=====' bar under the MavPASS leader's name
             for(int i = 0; i < line.length()-3;i++){
-
                 new_list.write("=");
             }
 
+            // Writes the student's data
             for(String l: student_lines){
                 new_list.write(l);
             }
@@ -591,9 +600,10 @@ public class GUI implements ActionListener{
      * Repeated code that was found in the generate_list_X() methods.
      * Creates a dictionary "Generated Files HERE" if it doesn't exist.
      * Then gives the file path of said file to be used to create other files inside of the directory.
-     * @return String, file path of the created (or existing) "Generated Files HERE" directory
+     * @param raffle - boolean, True if creating Raffle dictionary, False if not
+     * @return - String, file path of the created (or existing) "Generated Files HERE" directory
      */
-    private String create_directory(Boolean raffle){
+    private String create_directory(boolean raffle){
         File generated_files;
         if (!raffle){
             generated_files = new File("Generated Files HERE");
@@ -774,14 +784,14 @@ public class GUI implements ActionListener{
                         generate_list_1(3, d);
                         System.out.print("#####");
                     }
+
                     generate_list_2(true);
-                    System.out.print("#####");
                     generate_list_2(false);
-                    System.out.print("#####");
+                    System.out.print("##########");
+
                     generate_list_3();
-                    System.out.print("#####");
                     generate_list_4();
-                    System.out.print("##### ] - DONE!");
+                    System.out.print("########## ] - DONE!");
                     COMPLETE();
                 }
                 // Gives an error message to the USER via a pop-up menu

@@ -156,6 +156,7 @@ public class ProgramData {
     public static ArrayList<String> entries_by_college(Integer mode, String dept){
         ArrayList<String> final_data = new ArrayList<>();
 
+        // Generates the current TITLE of the department being generated
         String title_line = "";
         switch (dept){
 
@@ -187,16 +188,16 @@ public class ProgramData {
             int session_count = student.get_Dept_sessions(dept).size();
             int entries = session_count - 9;
 
+            // If student has NO sessions for this department, skip this Student
             if (session_count <= 0){
                 continue;
             }
 
-            // TODO HERE THIS IS WHERE YOU CAN ADD FILTERS
-
+            // Switches between the modes based on the inputted mode value
             switch (mode){
 
-            // FILTERED
 
+                // 1 - "So close" list, for students with 5 - 9 sessions close to having 1 entry for a raffle
                 case 1:
                     if (!(session_count >= 5 && session_count <= 9)){
                         continue;
@@ -206,6 +207,7 @@ public class ProgramData {
                     }
                     break;
 
+                // 3 - DEPARTMENT SPECIFIC, UNFILTERED Department data
                 case 3:
                     // Skip student if less than 10 sessions
                     if (session_count <= 10){
@@ -213,9 +215,9 @@ public class ProgramData {
                     }
                     break;
 
-            // UNFILTERED
-
-
+                // BOTH FILTERED AND UNFILTERED
+                // 0 - COMPLETE, UNFILTERED LIST of ALL Students
+                // 2 - DEPARTMENT SPECIFIC, FILTERED Department data
                 case 0:
                 case 2:
                     if (session_count <= 10){
@@ -270,18 +272,12 @@ public class ProgramData {
                 }
             }
 
-//            if (stu_codes.isEmpty()){
-//                continue;
-//            }
-
             // Adds to the student line the CLASS CODE and COUNTS
             for(int i = 0; i < stu_codes.size(); i++){
                 student_line.append(String.format("  %s: %s\n", stu_codes.get(i), stu_codes_counts.get(i)));
             }
             final_data.add(student_line.toString());
-
         }
         return final_data;
-
     }
 }

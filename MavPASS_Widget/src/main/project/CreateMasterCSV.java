@@ -15,10 +15,7 @@ public class CreateMasterCSV {
     // "Unique" data ID starts at 1
     public static int data_id = 1;
 
-    public static void main(String[] args) {
-
-//        System.out.println(format_name("vaN der hAArt"));
-    }
+    public static void main(String[] args) {}
 
     /**
      * Executes the code, taking from a directory with EXCEL FILES you want to concatenate into a master csv file.
@@ -91,9 +88,7 @@ public class CreateMasterCSV {
 
             csv.write(data_line);
             data_id++;
-
         }
-
     }
 
     /**
