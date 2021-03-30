@@ -1,4 +1,5 @@
 DEV-LOG for MavPASS Attendance Widget
+
 - - 03/29/2021 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 Hiya! I'm Danny Le. I wrote this program entirely by myself as a side project for my MavPASS responsibilities. It turned
