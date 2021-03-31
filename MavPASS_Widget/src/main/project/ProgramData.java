@@ -210,7 +210,7 @@ public class ProgramData {
                 // 3 - DEPARTMENT SPECIFIC, UNFILTERED Department data
                 case 3:
                     // Skip student if less than 10 sessions
-                    if (session_count <= 10){
+                    if (session_count < 10){
                         continue;
                     }
                     break;
@@ -220,7 +220,7 @@ public class ProgramData {
                 // 2 - DEPARTMENT SPECIFIC, FILTERED Department data
                 case 0:
                 case 2:
-                    if (session_count <= 10){
+                    if (session_count < 10){
                         entries = 0;
                     }
                     break;
@@ -274,7 +274,7 @@ public class ProgramData {
 
             // Adds to the student line the CLASS CODE and COUNTS
             for(int i = 0; i < stu_codes.size(); i++){
-                student_line.append(String.format("  %s: %s\n", stu_codes.get(i), stu_codes_counts.get(i)));
+                student_line.append(String.format(" - %s: %s\n", stu_codes.get(i), stu_codes_counts.get(i)));
             }
             final_data.add(student_line.toString());
         }
