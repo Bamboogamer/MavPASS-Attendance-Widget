@@ -165,16 +165,16 @@ public class StudentObject {
                 // If days since the latest session is between 14 and 20 days (Week 2)
                 // OR if days since the latest session is between 28 and 34 (Week 4)
                 // ** SHOW ON GENERATED LIST **
-                if (days_since >= 14 && days_since < 21
-                        || days_since >= 28 && days_since < 35) {
+                if ((days_since >= 14 && days_since < 21)
+                        || (days_since >= 28 && days_since < 35)) {
                     status = false;
                 }
 
                 // If days since the latest session is between 21 and 28 days (Week 3)
                 // OR if days since the latest session is more than 35 days (Week 5+)
                 // ** DO NOT SHOW ON GENERATED LIST **
-                else if (days_since >= 21 && days_since <= 28
-                        || days_since >= 35){
+                else if ((days_since >= 21 && days_since <= 28)
+                        || (days_since >= 35)){
                     status = true;
                 }
 
